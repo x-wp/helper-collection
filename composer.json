@@ -1,0 +1,47 @@
+{
+  "name": "x-wp/helper-collection",
+  "description": "Collection of various helper components used by xWP packages",
+  "license": "GPL-2.0-only",
+  "type": "library",
+  "keywords": [
+    "Utilities",
+    "classes",
+    "decoupling",
+    "interfaces",
+    "interoperability",
+    "standards",
+    "extended-wp"
+  ],
+  "authors": [
+    {
+      "name": "Sibin Grasic",
+      "email": "sibin.grasic@oblak.studio"
+    }
+  ],
+  "require": {
+    "php": ">=8.0"
+  },
+  "require-dev": {
+    "oblak/wordpress-coding-standard": "^1"
+  },
+  "replace": {
+    "x-wp/helper-abstracts": "self.version",
+    "x-wp/helper-traits": "self.version"
+  },
+  "suggest": {
+    "automattic/jetpack-autoloader": "Allow for better interoperability with other plugins that use this package."
+  },
+  "autoload": {
+    "psr-4": {
+      "XWP\\Helper\\": ""
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "platform": {
+      "php": "8.0"
+    }
+  }
+}
