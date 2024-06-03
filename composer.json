@@ -25,7 +25,8 @@
     "oblak/wordpress-coding-standard": "^1"
   },
   "replace": {
-    "x-wp/helper-abstracts": "self.version",
+    "x-wp/helper-classes": "self.version",
+    "x-wp/helper-function": "self.version",
     "x-wp/helper-traits": "self.version"
   },
   "suggest": {
@@ -34,7 +35,13 @@
   "autoload": {
     "psr-4": {
       "XWP\\Helper\\": ""
-    }
+    },
+    "files": [
+      "Functions/xwp-helper-fns.php"
+    ],
+    "classmap": [
+      "Functions/"
+    ]
   },
   "config": {
     "allow-plugins": {

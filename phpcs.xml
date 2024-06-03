@@ -14,5 +14,5 @@
     <severity>0</severity>
   </rule>
 
-  <file>/**/*.php</file>
+  <file>./</file>
 </ruleset>
