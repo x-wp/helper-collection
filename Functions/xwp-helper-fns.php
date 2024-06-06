@@ -67,6 +67,18 @@ endif;
 
 if ( ! function_exists( 'wp_array_diff_assoc' ) ) :
     /**
+     * Legacy function to extract a slice of an array not including the specified keys.
+     *
+     * @param  array $input_array Input array.
+     * @param  array $keys        Keys to exclude.
+     */
+    function wp_array_diff_assoc( array $input_array, array $keys ) {
+        return xwp_array_diff_assoc( $input_array, ...$keys );
+    }
+endif;
+
+if ( ! function_exists( 'xwp_array_diff_assoc' ) ) :
+    /**
      * Extracts a slice of array not including the specified keys.
      *
      * @template T The type of the elements in the input array.
@@ -75,7 +87,7 @@ if ( ! function_exists( 'wp_array_diff_assoc' ) ) :
      * @param  array<string>|string ...$keys     Keys to exclude.
      * @return array<string, T>                  Array with the keys removed.
      */
-    function wp_array_diff_assoc( array $input_array, string|array ...$keys ) {
+    function xwp_array_diff_assoc( array $input_array, string ...$keys ) {
         if ( is_array( $keys[0] ) ) {
             $keys = $keys[0];
         }
