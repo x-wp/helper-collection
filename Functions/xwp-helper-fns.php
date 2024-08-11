@@ -156,3 +156,70 @@ if ( ! function_exists( 'xwp_remove_hook_callbacks' ) ) :
         return f\Hook_Remover::remove_callbacks( $classname, $target_hook, $method, $priority );
     }
 endif;
+
+
+
+if ( ! function_exists( 'xwp_clean' ) ) :
+    /**
+     * Clean variables using sanitize_text_field. Arrays are cleaned recursively.
+     * Non-scalar values are ignored.
+     *
+     * @param  string|array $input Data to sanitize.
+     * @return string|array
+     */
+    function xwp_clean( $input ) {
+        return f\Request::clean( $input );
+    }
+endif;
+
+if ( ! function_exists( 'xwp_uclean' ) ) :
+    /**
+     * Unslash then clean variables using sanitize_text_field. Arrays are cleaned recursively.
+     * Non-scalar values are ignored.
+     *
+     * @param  string|array $input Data to sanitize.
+     * @return string|array
+     */
+	function xwp_uclean( $input ) {
+		return f\Request::uclean( $input );
+	}
+endif;
+
+if ( ! function_exists( 'xwp_fetch_get_var' ) ) :
+    /**
+     * Get an item of `GET` data if set, otherwise return a default value.
+     *
+     * @param  string $key GET key.
+     * @param  string $def Default value.
+     * @return mixed  Value sanitized by xwp_uclean.
+     */
+    function xwp_fetch_get_var( $key, $def = null ) {
+        return f\Request::fetch_get_var( $key, $def );
+    }
+endif;
+
+if ( ! function_exists( 'xwp_fetch_post_var' ) ) :
+    /**
+     * Get an item of `POST` data if set, otherwise return a default value.
+     *
+     * @param  string $key  POST key.
+     * @param  string $def  Default value.
+     * @return mixed  Value sanitized by xwp_uclean.
+     */
+    function xwp_fetch_post_var( $key, $def = null ) {
+        return f\Request::fetch_post_var( $key, $def );
+    }
+endif;
+
+if ( ! function_exists( 'xwp_fetch_req_var' ) ) :
+    /**
+     * Get an item of `REQUEST`data if set, otherwise return a default value.
+     *
+     * @param  string $key  REQUEST key.
+     * @param  string $def  Default value.
+     * @return mixed  Value sanitized by xwp_uclean.
+     */
+    function xwp_fetch_req_var( $key, $def = null ) {
+        return f\Request::fetch_req_var( $key, $def );
+    }
+endif;
