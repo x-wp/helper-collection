@@ -28,7 +28,7 @@
   "prefer-stable": true,
   "autoload": {
     "psr-4": {
-      "XWP\\Helper\\Functions\\": ""
+      "XWP\\Helper\\Functions\\": "."
     },
     "files": [
       "xwp-helper-fns.php"

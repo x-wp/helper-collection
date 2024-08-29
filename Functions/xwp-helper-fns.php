@@ -223,3 +223,24 @@ if ( ! function_exists( 'xwp_fetch_req_var' ) ) :
         return f\Request::fetch_req_var( $key, $def );
     }
 endif;
+
+
+if ( ! function_exists( 'xwp_format_term_name' ) ) :
+    /**
+     * Format a term name with term parents.
+     *
+     * @param  WP_Term|int|string|null|array|\WP_Error $term WP_Term object, Term ID, Term slug, or Term name.
+     * @param  array<string, mixed>                    $args Formatting arguments. Default empty array.
+     *   - formatter (callable) Custom formatter for the displayed term name. Default null.
+     *   - count (bool) Whether to include the term count in the formatted name. Default false.
+     *   - link_format (string|callable|array|bool) URL Link format for the term link. Default false.
+     *   - link_items (bool) Whether to link the term items. Default false.
+     *   - link_final (bool) Whether to link the final term. Default true.
+     *   - separator (string) Separator between terms. Default ' > '.
+     *   - taxonomy (string) Taxonomy name. Default null. Mandatory if $term is a string. Optional otherwise.
+     * @return string Formatted term name with ancestors.
+     */
+    function xwp_format_term_name( WP_Term|int|string|null|array|\WP_Error $term, array $args = array() ): string {
+        return f\Term::format_hierarhical_name( $term, $args );
+    }
+endif;
