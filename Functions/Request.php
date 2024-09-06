@@ -64,6 +64,17 @@ final class Request {
     }
 
     /**
+     * Fetch a variable from the $_SERVER superglobal.
+     *
+     * @param  string $key The key to fetch.
+     * @param  mixed  $def The default value.
+     * @return mixed The fetched value.
+     */
+    public static function fetch_server_var( $key, $def = null ) {
+        return self::fetch_var( $_SERVER[ $key ], $def );
+    }
+
+    /**
      * Fetch, unslash, and clean a variable.
      *
      * @param  string $val Request variable.

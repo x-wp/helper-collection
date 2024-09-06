@@ -224,6 +224,19 @@ if ( ! function_exists( 'xwp_fetch_req_var' ) ) :
     }
 endif;
 
+if ( ! function_exists( 'xwp_fetch_server_var' ) ) :
+    /**
+     * Get an item of `SERVER` data if set, otherwise return a default value.
+     *
+     * @param  string $key  SERVER key.
+     * @param  string $def  Default value.
+     * @return mixed  Value sanitized by xwp_uclean.
+     */
+    function xwp_fetch_server_var( $key, $def = null ) {
+        return f\Request::fetch_server_var( $key, $def );
+    }
+endif;
+
 
 if ( ! function_exists( 'xwp_format_term_name' ) ) :
     /**
