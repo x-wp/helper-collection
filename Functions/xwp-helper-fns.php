@@ -44,7 +44,6 @@ if ( ! function_exists( 'wp_array_flatmap' ) ) :
 	}
 endif;
 
-
 if ( ! function_exists( 'wp_array_flatmap_assoc' ) ) :
     /**
      * Flatten and map an associative array of arrays.
@@ -62,7 +61,6 @@ if ( ! function_exists( 'wp_array_flatmap_assoc' ) ) :
     function wp_array_flatmap_assoc( callable $callback, array $input, string $key, bool $unkey = true ) {
         return f\Array_Extra::flatmap_assoc( $callback, $input, $key, $unkey );
     }
-
 endif;
 
 if ( ! function_exists( 'wp_array_diff_assoc' ) ) :
@@ -157,8 +155,6 @@ if ( ! function_exists( 'xwp_remove_hook_callbacks' ) ) :
     }
 endif;
 
-
-
 if ( ! function_exists( 'xwp_clean' ) ) :
     /**
      * Clean variables using sanitize_text_field. Arrays are cleaned recursively.
@@ -184,59 +180,6 @@ if ( ! function_exists( 'xwp_uclean' ) ) :
 		return f\Request::uclean( $input );
 	}
 endif;
-
-if ( ! function_exists( 'xwp_fetch_get_var' ) ) :
-    /**
-     * Get an item of `GET` data if set, otherwise return a default value.
-     *
-     * @param  string $key GET key.
-     * @param  string $def Default value.
-     * @return mixed  Value sanitized by xwp_uclean.
-     */
-    function xwp_fetch_get_var( $key, $def = null ) {
-        return f\Request::fetch_get_var( $key, $def );
-    }
-endif;
-
-if ( ! function_exists( 'xwp_fetch_post_var' ) ) :
-    /**
-     * Get an item of `POST` data if set, otherwise return a default value.
-     *
-     * @param  string $key  POST key.
-     * @param  string $def  Default value.
-     * @return mixed  Value sanitized by xwp_uclean.
-     */
-    function xwp_fetch_post_var( $key, $def = null ) {
-        return f\Request::fetch_post_var( $key, $def );
-    }
-endif;
-
-if ( ! function_exists( 'xwp_fetch_req_var' ) ) :
-    /**
-     * Get an item of `REQUEST`data if set, otherwise return a default value.
-     *
-     * @param  string $key  REQUEST key.
-     * @param  string $def  Default value.
-     * @return mixed  Value sanitized by xwp_uclean.
-     */
-    function xwp_fetch_req_var( $key, $def = null ) {
-        return f\Request::fetch_req_var( $key, $def );
-    }
-endif;
-
-if ( ! function_exists( 'xwp_fetch_server_var' ) ) :
-    /**
-     * Get an item of `SERVER` data if set, otherwise return a default value.
-     *
-     * @param  string $key  SERVER key.
-     * @param  string $def  Default value.
-     * @return mixed  Value sanitized by xwp_uclean.
-     */
-    function xwp_fetch_server_var( $key, $def = null ) {
-        return f\Request::fetch_server_var( $key, $def );
-    }
-endif;
-
 
 if ( ! function_exists( 'xwp_format_term_name' ) ) :
     /**

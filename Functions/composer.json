@@ -31,7 +31,8 @@
       "XWP\\Helper\\Functions\\": "."
     },
     "files": [
-      "xwp-helper-fns.php"
+      "xwp-helper-fns.php",
+      "xwp-helper-fns-req.php"
     ]
   }
 }
