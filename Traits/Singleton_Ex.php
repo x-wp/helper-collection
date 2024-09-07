@@ -20,7 +20,7 @@ trait Singleton_Ex {
      * @return static
      */
     public static function instance(): static {
-        static::$instance ??= [];
+        static::$instance ??= array();
 
         return static::$instance[ static::class ] ??= new static();
     }

@@ -25,7 +25,6 @@ trait Singleton {
      * @return static
      */
     public static function instance(): static {
-
         return static::$instance ??= new static();
     }
 
