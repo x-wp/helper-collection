@@ -33,7 +33,7 @@ final class Term {
         }
 
         $formatter   = self::get_name_formatter( $args );
-        $formatted   = \array_map( \get_term( ... ), \get_ancestors( $term->term_id, $term->taxonomy ) );
+        $formatted   = \array_map( 'get_term', \get_ancestors( $term->term_id, $term->taxonomy ) );
         $formatted   = \array_map( $formatter, \array_reverse( $formatted ) );
         $formatted[] = $args['link_final'] ? $formatter( $term ) : $term->name;
 
@@ -75,7 +75,7 @@ final class Term {
      */
     private static function get_name_formatter( array $args ): Closure {
         if ( \is_callable( $args['formatter'] ?? null ) ) {
-            return $args['formatter']( ... );
+            return $args['formatter'];
         }
 
         $formatter ??= $args['link_items'] && $args['link_format']
@@ -101,8 +101,8 @@ final class Term {
      */
     private static function get_link_formatter( string|callable|array|bool $fmt ): ?Closure {
         return match ( true ) {
-            \is_bool( $fmt ) && $fmt => \get_term_link( ... ),
-            \is_callable( $fmt )     => $fmt( ... ),
+            \is_bool( $fmt ) && $fmt => 'get_term_link',
+            \is_callable( $fmt )     => $fmt,
             \is_array( $fmt )        => static fn( $t ) => \call_user_func( $fmt, $t ),
             \is_string( $fmt )       => static fn( $t ) => \add_query_arg( $t->taxonomy, $t->slug, $fmt ),
             default                  => null,
