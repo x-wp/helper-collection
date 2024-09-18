@@ -14,7 +14,7 @@ final class Request {
      */
     public static function clean( $input ) {
         return match ( true ) {
-            \is_array( $input )  => \array_map( self::clean( ... ), $input ),
+            \is_array( $input )  => \array_map( array( self::class, 'clean' ), $input ),
             \is_scalar( $input ) => \sanitize_text_field( $input ),
             default              => $input,
         };

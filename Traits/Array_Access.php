@@ -6,22 +6,29 @@ namespace XWP\Helper\Traits;
  *
  * @template TKey
  * @template TValue
- * @template-covariant TValue
- * @template-implements \ArrayAccess<TKey, TValue>, \Iterator<TKey, TValue>, \Countable, \JsonSerializable
- * @phpstan-require-implements \ArrayAccess<TKey, TValue>, \Iterator<TKey, TValue>, \Countable, \JsonSerializable
+ *
+ * @template-implements \ArrayAccess<TKey, TValue>
+ * @template-implements \Iterator<TKey, TValue>
+ * @template-implements \Countable
+ * @template-implements \JsonSerializable
+ *
+ * @phpstan-require-implements \ArrayAccess<TKey, TValue>
+ * @phpstan-require-implements \Iterator<TKey, TValue>
+ * @phpstan-require-implements \Countable
+ * @phpstan-require-implements \JsonSerializable
  */
 trait Array_Access {
     /**
      * Traversible data array.
      *
-     * @var array<int|string, mixed>
+     * @var array<TKey, TValue>
      */
     protected array $arr_data = array();
 
     /**
      * Array of keys for the data array.
      *
-     * @var array<string|int>
+     * @var array<int,TKey>
      */
     protected array $arr_data_keys = array();
 
@@ -189,9 +196,9 @@ trait Array_Access {
      * @param array<TKey, TValue> $data The data to unserialize.
      * @return void
      */
-    public function __unserialize($data) {
-        foreach ($data as $k => $v) {
-            $this[$k] = $v;
+    public function __unserialize( $data ) {
+        foreach ( $data as $k => $v ) {
+            $this[ $k ] = $v;
         }
     }
 
@@ -207,14 +214,14 @@ trait Array_Access {
     /**
      * Set the state of the object.
      *
-     * @param array<TKey, TValue> $data The data to set.
+     * @param array{arr_data: array<TKey, TValue>} $data The data to set.
      * @return static
      */
-    public static function __set_state( array $data): static {
+    public static function __set_state( array $data ): static {
         $obj = new static();
 
-        foreach ($data['arr_data'] as $k => $v) {
-            $obj[$k] = $v;
+        foreach ( $data['arr_data'] as $k => $v ) {
+            $obj[ $k ] = $v;
         }
 
         return $obj;
