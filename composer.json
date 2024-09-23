@@ -22,9 +22,9 @@
     "php": ">=8.0"
   },
   "require-dev": {
+    "automattic/jetpack-constants": "^2.0",
     "oblak/wordpress-coding-standard": "^1",
-    "php-stubs/woocommerce-stubs": "^9.3",
-    "automattic/jetpack-constants": "^2.0"
+    "php-stubs/woocommerce-stubs": "^9.3"
   },
   "replace": {
     "x-wp/helper-classes": "self.version",
@@ -40,12 +40,13 @@
       "XWC\\": "WC/",
       "XWP\\Helper\\": ""
     },
+    "classmap": [
+      "Classes/WP/",
+      "Functions/"
+    ],
     "files": [
       "Functions/xwp-helper-fns-req.php",
       "Functions/xwp-helper-fns.php"
-    ],
-    "classmap": [
-      "Functions/"
     ]
   },
   "config": {
