@@ -75,7 +75,7 @@ final class Term {
      */
     private static function get_name_formatter( array $args ): Closure {
         if ( \is_callable( $args['formatter'] ?? null ) ) {
-            return $args['formatter'];
+            return static fn( $t ) => $args['formatter']( $t );
         }
 
         $formatter ??= $args['link_items'] && $args['link_format']
@@ -101,10 +101,10 @@ final class Term {
      */
     private static function get_link_formatter( string|callable|array|bool $fmt ): ?Closure {
         return match ( true ) {
-            \is_bool( $fmt ) && $fmt => 'get_term_link',
-            \is_callable( $fmt )     => $fmt,
+            \is_bool( $fmt ) && $fmt => static fn( $t ) => \get_term_link( $t ),
             \is_array( $fmt )        => static fn( $t ) => \call_user_func( $fmt, $t ),
             \is_string( $fmt )       => static fn( $t ) => \add_query_arg( $t->taxonomy, $t->slug, $fmt ),
+            \is_callable( $fmt )     => static fn( $t ) => $fmt( $t ),
             default                  => null,
         };
     }
