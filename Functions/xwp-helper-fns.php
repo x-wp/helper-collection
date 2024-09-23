@@ -8,22 +8,47 @@
 
 use XWP\Helper\Functions as f;
 
+if ( ! function_exists( 'xwp_wpfs' ) ) :
+    /**
+	 * Loads the WordPress filesystem
+	 *
+     * @template TFS of \WP_Filesystem_Base
+     *
+     * @param  class-string<TFS> $method  Optional. Filesystem method classname. Default null.
+	 * @param  array|false       $args    Optional. Connection args, These are passed directly to the WP_Filesystem_*() classes. Default false.
+     * @param  string|false      $context Optional. Context for get_filesystem_method(). Default false.
+	 * @return TFS|false|null
+	 */
+	function xwp_wpfs(
+        string $method = null,
+        array|bool $args = false,
+        string|bool $context = false,
+	): WP_Filesystem_Base|bool|null {
+        //phpcs:ignore Universal.Operators.DisallowShortTernary.Found
+        $args = array_filter( $args ?: array( 'method' => $method ) );
+
+		return f\WPFS::load( $args, $context );
+	}
+endif;
+
 if ( ! function_exists( 'wp_load_filesystem' ) ) :
 	/**
 	 * Loads the WordPress filesystem
 	 *
-	 * @param  array|false  $args                         Optional. Connection args, These are passed directly to the WP_Filesystem_*() classes. Default false.
-	 * @param  string|false $context                      Optional. Context for get_filesystem_method(). Default false.
-	 * @param  bool         $allow_relaxed_file_ownership Optional. Whether to allow Group/World writable. Default false.
+     * @template TFS of \WP_Filesystem_Base
+     *
+	 * @param  array{method?: class-string<TFS>}|array<string,mixed>|false $args    Optional. Connection args, These are passed directly to the WP_Filesystem_*() classes. Default false.
+	 * @param  string|false                                                $context Optional. Context for get_filesystem_method(). Default false.
      *
 	 * @return \WP_Filesystem_Base|false|null
+     *
+     * @deprecated 1.10.0 Use xwp_wpfs instead.
 	 */
 	function wp_load_filesystem(
-        array|false $args = false,
-        string|false $context = false,
-        bool $allow_relaxed_file_ownership = false,
-	): \WP_Filesystem_Base|false|null {
-		return f\WPFS::load( $args, $context, $allow_relaxed_file_ownership );
+        array|bool $args = false,
+        string|bool $context = false,
+	): WP_Filesystem_Base|bool|null {
+		return xwp_wpfs( null, $args, $context );
 	}
 endif;
 
@@ -147,9 +172,9 @@ if ( ! function_exists( 'xwp_remove_hook_callbacks' ) ) :
      */
     function xwp_remove_hook_callbacks(
         string $classname,
-        string|false $target_hook = false,
-        string|false $method = false,
-        int|false $priority = false,
+        string|bool $target_hook = false,
+        string|bool $method = false,
+        int|bool $priority = false,
 	): array {
         return f\Hook_Remover::remove_callbacks( $classname, $target_hook, $method, $priority );
     }

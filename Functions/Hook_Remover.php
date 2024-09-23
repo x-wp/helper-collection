@@ -3,7 +3,7 @@
 namespace XWP\Helper\Functions;
 
 class Hook_Remover {
-    private static function get_classname( string|object|false|null $target = '' ): string|false {
+    private static function get_classname( string|object|bool|null $target = '' ): string|bool {
         $classname = match ( true ) {
             \is_null( $target ),
             false === $target     => '',
@@ -15,7 +15,7 @@ class Hook_Remover {
         return \class_exists( $classname ) ? $classname : false;
     }
 
-    private static function callback_matches( callable|array $callback, string $classname, string|false $method = false ): bool {
+    private static function callback_matches( callable|array $callback, string $classname, string|bool $method = false ): bool {
         if ( ! \is_array( $callback['function'] ) ) {
             return false;
         }
@@ -27,7 +27,7 @@ class Hook_Remover {
         return ! $method || ! ( $method !== $callback['function'][1] ?? false );
     }
 
-    private static function get_callbacks( string $hook_name, int|false $priority = false ): array {
+    private static function get_callbacks( string $hook_name, int|bool $priority = false ): array {
         return $priority
             ? $GLOBALS['wp_filter'][ $hook_name ][ $priority ] ?? array()
             : $GLOBALS['wp_filter'][ $hook_name ]->callbacks ?? array();
@@ -57,9 +57,9 @@ class Hook_Remover {
 
     final public static function remove_callbacks(
         string $classname,
-        string|false $target_hook = false,
-        string|false $method = false,
-        int|false $priority = false,
+        string|bool $target_hook = false,
+        string|bool $method = false,
+        int|bool $priority = false,
 	): array {
         $removed = array();
 
