@@ -22,18 +22,22 @@
     "php": ">=8.0"
   },
   "require-dev": {
-    "oblak/wordpress-coding-standard": "^1"
+    "oblak/wordpress-coding-standard": "^1",
+    "php-stubs/woocommerce-stubs": "^9.3",
+    "automattic/jetpack-constants": "^2.0"
   },
   "replace": {
     "x-wp/helper-classes": "self.version",
     "x-wp/helper-function": "self.version",
-    "x-wp/helper-traits": "self.version"
+    "x-wp/helper-traits": "self.version",
+    "x-wp/helper-woocommerce": "self.version"
   },
   "suggest": {
     "automattic/jetpack-autoloader": "Allow for better interoperability with other plugins that use this package."
   },
   "autoload": {
     "psr-4": {
+      "XWC\\": "WC/",
       "XWP\\Helper\\": ""
     },
     "files": [
