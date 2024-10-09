@@ -8,6 +8,35 @@
 
 use XWP\Helper\Functions as f;
 
+if ( ! function_exists( 'xwp_parse_args' ) ) :
+
+    /**
+     * Same as `wp_parse_args` but recursive.
+     *
+     * @param  string|array|object $args     Arguments to parse.
+     * @param  array               $defaults Optional. Default values. Default empty array.
+     * @return array<string,mixed>
+     */
+    function xwp_parse_args( string|array|object $args, array $defaults = array() ): array {
+        match ( true ) {
+            is_object( $args ) => $parsed = get_object_vars( $args ),
+            is_array( $args )  => $parsed = &$args,
+            default          => wp_parse_str( $args, $parsed ),
+        };
+
+        $result = $defaults;
+
+        foreach ( $args as $k => $v ) {
+            $result[ $k ] = is_array( $v ) && isset( $result[ $k ] ) && is_array( $result[ $k ] )
+                ? xwp_parse_args( $v, $result[ $k ] )
+                : $v;
+        }
+
+        return $result;
+    }
+
+endif;
+
 if ( ! function_exists( 'xwp_wpfs' ) ) :
     /**
 	 * Loads the WordPress filesystem
@@ -52,7 +81,7 @@ if ( ! function_exists( 'wp_load_filesystem' ) ) :
 	}
 endif;
 
-if ( ! function_exists( 'wp_array_flatmap' ) ) :
+if ( ! function_exists( 'xwp_array_flatmap' ) ) :
     /**
 	 * Flattens and maps an array.
 	 *
@@ -64,8 +93,27 @@ if ( ! function_exists( 'wp_array_flatmap' ) ) :
      *
 	 * @return array<array-key, R>
 	 */
-	function wp_array_flatmap( callable $callback, array $input_array ) {
+	function xwp_array_flatmap( callable $callback, array $input_array ) {
         return f\Array_Extra::flatmap( $callback, $input_array );
+	}
+endif;
+
+if ( ! function_exists( 'wp_array_flatmap' ) ) :
+    /**
+	 * Flattens and maps an array.
+	 *
+	 * @template T The type of the elements in the input array.
+	 * @template R The type of the elements in the returned array.
+     *
+	 * @param  array<array-key, T>|callable(T): R $callback    Function to apply to each element.
+	 * @param  array<array-key, T>|callable(T): R $input_array  Array to flatten and map.
+     *
+	 * @return array<array-key, R>
+	 */
+	function wp_array_flatmap( callable|array $callback, array|callable $input_array ) {
+        return is_array( $input_array )
+            ? xwp_array_flatmap( $callback, $input_array )
+            : xwp_array_flatmap( $input_array, $callback );
 	}
 endif;
 
