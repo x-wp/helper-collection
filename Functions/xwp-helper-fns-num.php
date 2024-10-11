@@ -19,7 +19,7 @@ if ( ! function_exists( 'xwp_is_float_str' ) ) :
 			return true;
 		}
 
-		return is_string( $str ) && ctype_digit( strval( abs( $str ) ) );
+		return is_numeric( $str ) && ctype_digit( strval( abs( $str ) ) );
 	}
 
 endif;
