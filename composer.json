@@ -46,6 +46,7 @@
     ],
     "files": [
       "Functions/xwp-helper-fns-req.php",
+      "Functions/xwp-helper-fns-num.php",
       "Functions/xwp-helper-fns.php"
     ]
   },
