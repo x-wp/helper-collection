@@ -8,6 +8,21 @@
 
 use XWP\Helper\Functions as f;
 
+if ( ! function_exists( 'xwp_can_load_rest_ns' ) ) :
+    /**
+     * Check if a REST namespace should be loaded. Useful to maintain site performance even when lots of REST namespaces are registered.
+     *
+     * @param  string      $space The namespace to check.
+     * @param  string|null $route REST route being checked. Optional.
+     * @param  array       $known Known namespaces that we know are safe to not load if the request is not for them.
+     * @return bool
+     */
+    function xwp_can_load_rest_ns( string $space, ?string $route = null, array $known = array() ): bool {
+        return f\Request::should_load_rest_ns( $space, $route, $known );
+    }
+
+endif;
+
 if ( ! function_exists( 'xwp_fetch_get_var' ) ) :
     /**
      * Get an item of `GET` data if set, otherwise return a default value.

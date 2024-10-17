@@ -7,6 +7,60 @@ namespace XWP\Helper\Functions;
  */
 final class Request {
     /**
+     * Check if a REST namespace should be loaded. Useful to maintain site performance even when lots of REST namespaces are registered.
+     *
+     * @since 9.2.0.
+     *
+     * @param string        $space The namespace to check.
+     * @param string        $route (Optional) The REST route being checked.
+     * @param array<string> $known Known namespaces that we know are safe to not load if the request is not for them.
+     *
+     * @return bool True if the namespace should be loaded, false otherwise.
+     */
+    public static function should_load_rest_ns( string $space, ?string $route = null, array $known = array() ): bool {
+        $route ??= $GLOBALS['wp']->query_vars['rest_route'] ?? false;
+
+        if ( ! $route ) {
+            return true;
+        }
+
+        $route = \trailingslashit( \ltrim( $route, '/' ) );
+        $space = \trailingslashit( $space );
+
+		/**
+		 * Known namespaces that we know are safe to not load if the request is not for them.
+		 * Namespaces not in this namespace should always be loaded, because we don't know if they won't be making another internal REST request to an unloaded namespace.
+		 *
+		 * @param  array<string> $known_ns Known namespaces that we know are safe to not load if the request is not for them.
+		 * @param  string        $space    The namespace to check.
+		 * @param  string        $route    The REST route being checked.
+		 * @return array<string>
+		 *
+		 * @since 1.16.0
+		 */
+		$known = \apply_filters( 'xwp_known_rest_namespaces', $known, $space, $route );
+
+		if ( ! \array_reduce( $known, static fn( $c, $r ) => $c || \str_starts_with( $route, $r ), false ) ) {
+			return true;
+		}
+
+        $load = \str_starts_with( $route, $space );
+
+		/**
+		 * Filters whether a namespace should be loaded.
+		 *
+		 * @param bool   $load  True if the namespace should be loaded, false otherwise.
+		 * @param string $space The namespace to check.
+		 * @param string $route The REST route being checked.
+		 * @param array  $known Known namespaces that we know are safe to not load if the request is not for them.
+		 * @return bool
+		 *
+		 * @since 1.16.0
+		 */
+		return \apply_filters( 'xwp_rest_can_load_namespace', $load, $space, $route, $known );
+    }
+
+    /**
      * Clean input data.
      *
      * @param  string|array $input The input data.
