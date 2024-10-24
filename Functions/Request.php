@@ -26,6 +26,7 @@ final class Request {
 
         $route = \trailingslashit( \ltrim( $route, '/' ) );
         $space = \trailingslashit( $space );
+        $known = \array_map( 'trailingslashit', $known );
 
 		/**
 		 * Known namespaces that we know are safe to not load if the request is not for them.
@@ -38,11 +39,11 @@ final class Request {
 		 *
 		 * @since 1.16.0
 		 */
-		$known = \apply_filters( 'xwp_known_rest_namespaces', $known, $space, $route );
-
-		if ( ! \array_reduce( $known, static fn( $c, $r ) => $c || \str_starts_with( $route, $r ), false ) ) {
-			return true;
-		}
+        foreach ( \apply_filters( 'xwp_known_rest_namespaces', $known, $space, $route ) as $k ) {
+            if ( \str_starts_with( $route, $k ) ) {
+                return true;
+            }
+        }
 
         $load = \str_starts_with( $route, $space );
 
