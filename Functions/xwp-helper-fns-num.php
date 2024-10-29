@@ -6,7 +6,7 @@
  * @subpackage Functions
  */
 
-if ( ! function_exists( 'xwp_is_float_str' ) ) :
+if ( ! function_exists( 'xwp_is_int_str' ) ) :
 
 	/**
 	 * Check if a string is a integer

@@ -39,4 +39,17 @@ class Array_Extra {
     final public static function slice_assoc( array $input_array, array $keys ) {
         return \array_intersect_key( $input_array, \array_flip( $keys ) );
     }
+
+    final public static function from_string( string|array $target, string $delim ): array {
+        if ( \is_array( $target ) ) {
+            return $target;
+        }
+
+        return \array_values(
+            \array_filter(
+                \array_map( 'trim', \explode( $delim, $target ) ),
+                static fn( $v ) => '' !== $v,
+            ),
+        );
+    }
 }
