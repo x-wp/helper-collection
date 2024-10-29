@@ -195,3 +195,54 @@ if ( ! function_exists( 'xwp_bool_to_str' ) ) :
 		return xwp_str_to_bool( $boolean ) ? 'yes' : 'no';
 	}
 endif;
+
+
+if ( ! function_exists( 'xwp_get_template' ) ) :
+
+    /**
+     * Get a template passing variables and including the file.
+     *
+     * @param  string                   $template The template file.
+     * @param  null|array<string,mixed> $params Optional. The variables to pass to the template file.
+     *
+     * @since 1.18.0
+     */
+    function xwp_get_template( string $template, ?array $params = null ): void {
+        if ( ! file_exists( $template ) ) {
+            _doing_it_wrong(
+                __FUNCTION__,
+                sprintf( 'The template file %s does not exist.', esc_html( basename( $template ) ), ),
+                '1.0.0',
+            );
+            return;
+        }
+
+        if ( is_array( $params ) && $params ) {
+            //phpcs:ignore WordPress.PHP.DontExtract.extract_extract
+            extract( $params );
+        }
+
+        include $template;
+    }
+
+endif;
+
+
+if ( ! function_exists( 'xwp_get_template_html' ) ) :
+
+    /**
+     * Like `xwp_get_template` but returns the HTML instead of outputting it.
+     *
+     * @param  string                   $template The template file.
+     * @param  null|array<string,mixed> $params   Optional. The variables to pass to the template file.
+     * @return string
+     *
+     * @since 1.18.0
+     */
+    function xwp_get_template_html( string $template, ?array $params = null ): string {
+        ob_start();
+        xwp_get_template( $template, $params );
+        return (string) ob_get_clean();
+    }
+
+endif;
