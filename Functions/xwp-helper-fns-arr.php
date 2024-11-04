@@ -67,11 +67,14 @@ if ( ! function_exists( 'wp_array_diff_assoc' ) ) :
     /**
      * Legacy function to extract a slice of an array not including the specified keys.
      *
-     * @param  array $input_array Input array.
-     * @param  array $keys        Keys to exclude.
+     * @template T of array<string,mixed>
+     *
+     * @param  T             $arr  Input array.
+     * @param  array<string> $keys Keys to exclude.
+     * @return T
      */
-    function wp_array_diff_assoc( array $input_array, array $keys ) {
-        return xwp_array_diff_assoc( $input_array, ...$keys );
+    function wp_array_diff_assoc( array $arr, array $keys ) {
+        return xwp_array_diff_assoc( $arr, ...$keys );
     }
 endif;
 
@@ -79,18 +82,16 @@ if ( ! function_exists( 'xwp_array_diff_assoc' ) ) :
     /**
      * Extracts a slice of array not including the specified keys.
      *
-     * @template T
+     * @template T of array<string,mixed>
      *
      * @param  T                    $arr     Input array.
      * @param  string|array<string> ...$keys Keys to exclude.
      * @return T
      */
     function xwp_array_diff_assoc( array $arr, array|string ...$keys ) {
-        if ( is_array( $keys[0] ) ) {
-            $keys = $keys[0];
-        }
+        $keys = is_array( $keys[0] ?? '' ) ? $keys[0] : $keys;
 
-        return f\Array_Extra::diff_assoc( $arr, $keys );
+        return $keys ? f\Array_Extra::diff_assoc( $arr, $keys ) : $arr;
     }
 
 endif;
@@ -112,14 +113,16 @@ if ( ! function_exists( 'xwp_array_slice_assoc' ) ) :
     /**
      * Extracts a slice of an array.
      *
-     * @template T The type of the elements in the input array.
+     * @template T of array<string,mixed>
      *
-     * @param  array<string, T> $input_array Input array.
-     * @param  string           ...$keys     Keys to include.
-     * @return array<string, T>              Array with only the keys specified.
+     * @param  T                    $arr     Input array.
+     * @param  string|array<string> ...$keys Keys to exclude.
+     * @return T
      */
-	function xwp_array_slice_assoc( array $input_array, string ...$keys ) {
-		return f\Array_Extra::slice_assoc( $input_array, $keys );
+	function xwp_array_slice_assoc( array $arr, array|string ...$keys ) {
+        $keys = is_array( $keys[0] ?? '' ) ? $keys[0] : $keys;
+
+		return $keys ? f\Array_Extra::slice_assoc( $arr, $keys ) : $arr;
 	}
 endif;
 

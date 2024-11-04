@@ -49,7 +49,7 @@ if ( ! function_exists( 'xwp_wpfs' ) ) :
 	 * @return TFS|false|null
 	 */
 	function xwp_wpfs(
-        string $method = null,
+        string $method = WP_Filesystem_Direct::class,
         array|bool $args = false,
         string|bool $context = false,
 	): WP_Filesystem_Base|bool|null {
