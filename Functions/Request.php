@@ -28,17 +28,17 @@ final class Request {
         $space = \trailingslashit( $space );
         $known = \array_map( 'trailingslashit', $known );
 
-		/**
-		 * Known namespaces that we know are safe to not load if the request is not for them.
-		 * Namespaces not in this namespace should always be loaded, because we don't know if they won't be making another internal REST request to an unloaded namespace.
-		 *
-		 * @param  array<string> $known_ns Known namespaces that we know are safe to not load if the request is not for them.
-		 * @param  string        $space    The namespace to check.
-		 * @param  string        $route    The REST route being checked.
-		 * @return array<string>
-		 *
-		 * @since 1.16.0
-		 */
+        /**
+         * Known namespaces that we know are safe to not load if the request is not for them.
+         * Namespaces not in this namespace should always be loaded, because we don't know if they won't be making another internal REST request to an unloaded namespace.
+         *
+         * @param  array<string> $known_ns Known namespaces that we know are safe to not load if the request is not for them.
+         * @param  string        $space    The namespace to check.
+         * @param  string        $route    The REST route being checked.
+         * @return array<string>
+         *
+         * @since 1.16.0
+         */
         foreach ( \apply_filters( 'xwp_known_rest_namespaces', $known, $space, $route ) as $k ) {
             if ( \str_starts_with( $route, $k ) ) {
                 return true;
@@ -47,18 +47,18 @@ final class Request {
 
         $load = \str_starts_with( $route, $space );
 
-		/**
-		 * Filters whether a namespace should be loaded.
-		 *
-		 * @param bool   $load  True if the namespace should be loaded, false otherwise.
-		 * @param string $space The namespace to check.
-		 * @param string $route The REST route being checked.
-		 * @param array  $known Known namespaces that we know are safe to not load if the request is not for them.
-		 * @return bool
-		 *
-		 * @since 1.16.0
-		 */
-		return \apply_filters( 'xwp_rest_can_load_namespace', $load, $space, $route, $known );
+        /**
+         * Filters whether a namespace should be loaded.
+         *
+         * @param bool   $load  True if the namespace should be loaded, false otherwise.
+         * @param string $space The namespace to check.
+         * @param string $route The REST route being checked.
+         * @param array  $known Known namespaces that we know are safe to not load if the request is not for them.
+         * @return bool
+         *
+         * @since 1.16.0
+         */
+        return \apply_filters( 'xwp_rest_can_load_namespace', $load, $space, $route, $known );
     }
 
     /**
@@ -93,7 +93,38 @@ final class Request {
      * @return mixed The fetched value.
      */
     private static function fetch_var( &$val, $def = null ) {
-        return self::uclean( $val ?? $def );
+        $retval  = self::uclean( $val ?? $def );
+        $valtype = \gettype( $retval );
+        $deftype = \gettype( $def );
+
+        if ( 'NULL' === $deftype || $valtype === $deftype ) {
+            return $retval;
+        }
+
+        return match ( $deftype ) {
+            'boolean' => \xwp_str_to_bool( $retval ),
+            'integer' => \intval( $retval ),
+            'double'  => \floatval( $retval ),
+            'float'   => \floatval( $retval ),
+            'real'    => \floatval( $retval ),
+            'string'  => \strval( $retval ),
+            'array'   => \is_array( $retval ) ? \xwp_parse_args( $retval, $def ) : $def,
+            default   => $retval,
+        };
+    }
+
+    /**
+     * Fetch, unslash, and clean an array.
+     *
+     * @param  array<string,mixed> $arr The array to fetch.
+     * @param  array<string,mixed> $def The default values.
+     * @return array<string,mixed>
+     */
+    private static function fetch_arr( array &$arr, array $def = array() ): array {
+        return \xwp_array_slice_assoc(
+            \xwp_parse_args( self::uclean( $arr ), $def ),
+            ...\array_keys( $def ),
+        );
     }
 
     /**
@@ -165,46 +196,51 @@ final class Request {
     /**
      * Fetch `$_GET` superglobal array.
      *
+     * @param  array<string, mixed> $def Default values.
      * @return array<string, mixed>
      */
-    public static function fetch_get_arr() {
-        return self::fetch_var( $_GET, array() );
+    public static function fetch_get_arr( array $def = array() ): array {
+        return self::fetch_arr( $_GET, $def );
     }
 
     /**
      * Fetch `$_POST` superglobal array.
      *
+     * @param  array<string, mixed> $def Default values.
      * @return array<string, mixed>
      */
-    public static function fetch_post_arr() {
-        return self::fetch_var( $_POST, array() );
+    public static function fetch_post_arr( array $def = array() ) {
+        return self::fetch_arr( $_POST, $def );
     }
 
     /**
      * Fetch `$_REQUEST` superglobal array.
      *
+     * @param  array<string, mixed> $def Default values.
      * @return array<string, mixed>
      */
-    public static function fetch_req_arr() {
-        return self::fetch_var( $_REQUEST, array() );
+    public static function fetch_req_arr( array $def = array() ): array {
+        return self::fetch_arr( $_REQUEST, $def );
     }
 
     /**
      * Fetch `$_SERVER` superglobal array.
      *
+     * @param  array<string, mixed> $def Default values.
      * @return array<string, mixed>
      */
-    public static function fetch_server_arr() {
-        return self::fetch_var( $_SERVER, array() );
+    public static function fetch_server_arr( array $def = array() ): array {
+        return self::fetch_arr( $_SERVER, $def );
     }
 
     /**
      * Fetch `$_COOKIE` superglobal array.
      *
+     * @param  array<string, string> $def Default values.
      * @return array<string, mixed>
      */
-    public static function fetch_cookie_arr() {
-        return self::fetch_var( $_COOKIE, array() );
+    public static function fetch_cookie_arr( $def = array() ): array {
+        return self::fetch_arr( $_COOKIE, $def );
     }
 
     /**

@@ -48,7 +48,8 @@
       "Functions/xwp-helper-fns-arr.php",
       "Functions/xwp-helper-fns-req.php",
       "Functions/xwp-helper-fns-num.php",
-      "Functions/xwp-helper-fns.php"
+      "Functions/xwp-helper-fns.php",
+      "WC/xwc-helper-fns-api.php"
     ]
   },
   "config": {

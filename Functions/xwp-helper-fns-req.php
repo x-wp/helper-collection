@@ -27,10 +27,11 @@ if ( ! function_exists( 'xwp_fetch_get_var' ) ) :
     /**
      * Get an item of `GET` data if set, otherwise return a default value.
      *
-     * @template T
+     * @template T of string|int|bool|float|array|null
+     *
      * @param  string $key GET key.
-     * @param  null|T $def Default value.
-     * @return T
+     * @param  T      $def Default value.
+     * @return (T is string ? string : (T is int ? int : (T is array ? T : (T is float ? float : (T is bool ? bool : (T is null ? null : mixed))))))
      */
     function xwp_fetch_get_var( string $key, mixed $def = null ): mixed {
         return f\Request::fetch_get_var( $key, $def );
@@ -41,10 +42,11 @@ if ( ! function_exists( 'xwp_fetch_post_var' ) ) :
     /**
      * Get an item of `POST` data if set, otherwise return a default value.
      *
-     * @template T
+     * @template T of string|int|bool|float|array|null
+     *
      * @param  string $key POST key.
-     * @param  null|T $def Default value.
-     * @return T           Value sanitized by xwp_uclean.
+     * @param  T      $def Default value.
+     * @return (T is string ? string : (T is int ? int : (T is array ? T : (T is float ? float : (T is bool ? bool : (T is null ? null : mixed))))))
      */
     function xwp_fetch_post_var( string $key, mixed $def = null ): mixed {
         return f\Request::fetch_post_var( $key, $def );
@@ -55,10 +57,11 @@ if ( ! function_exists( 'xwp_fetch_req_var' ) ) :
     /**
      * Get an item of `REQUEST`data if set, otherwise return a default value.
      *
-     * @template T
+     * @template T of string|int|bool|float|array|null
+     *
      * @param  string $key REQUEST key.
-     * @param  null|T $def Default value.
-     * @return T           Value sanitized by xwp_uclean.
+     * @param  T      $def Default value.
+     * @return (T is string ? string : (T is int ? int : (T is array ? T : (T is float ? float : (T is bool ? bool : (T is null ? null : mixed))))))
      */
     function xwp_fetch_req_var( $key, $def = null ) {
         return f\Request::fetch_req_var( $key, $def );
@@ -69,10 +72,11 @@ if ( ! function_exists( 'xwp_fetch_server_var' ) ) :
     /**
      * Get an item of `SERVER` data if set, otherwise return a default value.
      *
-     * @template T
+     * @template T of string|int|bool|float|array|null
+     *
      * @param  string $key SERVER key.
-     * @param  null|T $def Default value.
-     * @return T           Value sanitized by xwp_uclean.
+     * @param  T      $def Default value.
+     * @return (T is string ? string : (T is int ? int : (T is array ? T : (T is float ? float : (T is bool ? bool : (T is null ? null : mixed))))))
      */
     function xwp_fetch_server_var( string $key, mixed $def = null ): mixed {
         return f\Request::fetch_server_var( $key, $def );
@@ -85,7 +89,7 @@ if ( ! function_exists( 'xwp_fetch_cookie_var' ) ) :
      *
      * @param  string $key COOKIE key.
      * @param  string $def Default value.
-     * @return string      Value sanitized by xwp_uclean.
+     * @return string
      */
     function xwp_fetch_cookie_var( string $key, string $def = '' ): string {
         return f\Request::fetch_cookie_var( $key, $def );
@@ -114,7 +118,7 @@ if ( ! function_exists( 'xwp_get_arr' ) ) :
      * @return T
      */
     function xwp_get_arr( array $def = array() ): array {
-        return xwp_parse_args( f\Request::fetch_get_arr(), $def );
+        return f\Request::fetch_get_arr( $def );
     }
 endif;
 
@@ -127,7 +131,7 @@ if ( ! function_exists( 'xwp_post_arr' ) ) :
      * @return T
      */
     function xwp_post_arr( array $def = array() ): array {
-        return xwp_parse_args( f\Request::fetch_post_arr(), $def );
+        return f\Request::fetch_post_arr( $def );
     }
 endif;
 
@@ -140,7 +144,7 @@ if ( ! function_exists( 'xwp_req_arr' ) ) :
      * @return T
      */
     function xwp_req_arr( array $def = array() ): array {
-        return xwp_parse_args( f\Request::fetch_req_arr(), $def );
+        return f\Request::fetch_req_arr( $def );
     }
 endif;
 
@@ -148,10 +152,12 @@ if ( ! function_exists( 'xwp_server_arr' ) ) :
     /**
      * Get the unslashed and cleaned $_SERVER array.
      *
-     * @return array<string, mixed>
+     * @template T of array
+     * @param  T $def Default value.
+     * @return T
      */
-    function xwp_server_arr(): array {
-        return f\Request::fetch_server_arr();
+    function xwp_server_arr( array $def = array() ): array {
+        return f\Request::fetch_server_arr( $def );
     }
 endif;
 

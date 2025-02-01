@@ -13,21 +13,24 @@ if ( ! function_exists( 'xwp_parse_args' ) ) :
     /**
      * Same as `wp_parse_args` but recursive.
      *
-     * @param  string|array|object $args     Arguments to parse.
-     * @param  array               $defaults Optional. Default values. Default empty array.
-     * @return array<string,mixed>
+     * @template TArgs of array
+     * @template TDefs of array
+     *
+     * @param  string|TArgs|object $args     Arguments to parse.
+     * @param  TDefs               $defaults Optional. Default values. Default empty array.
+     * @return (TArgs is array ? TArgs&TDefs : TDefs)
      */
     function xwp_parse_args( string|array|object $args, array $defaults = array() ): array {
         match ( true ) {
             is_object( $args ) => $parsed = get_object_vars( $args ),
             is_array( $args )  => $parsed = &$args,
-            default          => wp_parse_str( $args, $parsed ),
+            default            => wp_parse_str( $args, $parsed ),
         };
 
         $result = $defaults;
 
-        foreach ( $args as $k => $v ) {
-            $result[ $k ] = is_array( $v ) && isset( $result[ $k ] ) && is_array( $result[ $k ] )
+        foreach ( $parsed as $k => $v ) {
+            $result[ $k ] = isset( $result[ $k ] ) && is_array( $v ) && is_array( $result[ $k ] )
                 ? xwp_parse_args( $v, $result[ $k ] )
                 : $v;
         }
@@ -39,46 +42,46 @@ endif;
 
 if ( ! function_exists( 'xwp_wpfs' ) ) :
     /**
-	 * Loads the WordPress filesystem
-	 *
+     * Loads the WordPress filesystem
+     *
      * @template TFS of \WP_Filesystem_Base
      *
      * @param  class-string<TFS> $method  Optional. Filesystem method classname. Default null.
-	 * @param  array|false       $args    Optional. Connection args, These are passed directly to the WP_Filesystem_*() classes. Default false.
+     * @param  array|false       $args    Optional. Connection args, These are passed directly to the WP_Filesystem_*() classes. Default false.
      * @param  string|false      $context Optional. Context for get_filesystem_method(). Default false.
-	 * @return TFS|false|null
-	 */
-	function xwp_wpfs(
+     * @return TFS|false|null
+     */
+    function xwp_wpfs(
         string $method = WP_Filesystem_Direct::class,
         array|bool $args = false,
         string|bool $context = false,
-	): WP_Filesystem_Base|bool|null {
+    ): WP_Filesystem_Base|bool|null {
         //phpcs:ignore Universal.Operators.DisallowShortTernary.Found
         $args = array_filter( $args ?: array( 'method' => $method ) );
 
-		return f\WPFS::load( $args, $context );
-	}
+        return f\WPFS::load( $args, $context );
+    }
 endif;
 
 if ( ! function_exists( 'wp_load_filesystem' ) ) :
-	/**
-	 * Loads the WordPress filesystem
-	 *
+    /**
+     * Loads the WordPress filesystem
+     *
      * @template TFS of \WP_Filesystem_Base
      *
-	 * @param  array{method?: class-string<TFS>}|array<string,mixed>|false $args    Optional. Connection args, These are passed directly to the WP_Filesystem_*() classes. Default false.
-	 * @param  string|false                                                $context Optional. Context for get_filesystem_method(). Default false.
+     * @param  array{method?: class-string<TFS>}|array<string,mixed>|false $args    Optional. Connection args, These are passed directly to the WP_Filesystem_*() classes. Default false.
+     * @param  string|false                                                $context Optional. Context for get_filesystem_method(). Default false.
      *
-	 * @return \WP_Filesystem_Base|false|null
+     * @return \WP_Filesystem_Base|false|null
      *
      * @deprecated 1.10.0 Use xwp_wpfs instead.
-	 */
-	function wp_load_filesystem(
+     */
+    function wp_load_filesystem(
         array|bool $args = false,
         string|bool $context = false,
-	): WP_Filesystem_Base|bool|null {
-		return xwp_wpfs( null, $args, $context );
-	}
+    ): WP_Filesystem_Base|bool|null {
+        return xwp_wpfs( args: $args, context: $context );
+    }
 endif;
 
 if ( ! function_exists( 'xwp_deregister_blocks' ) ) :
@@ -108,7 +111,7 @@ if ( ! function_exists( 'xwp_remove_hook_callbacks' ) ) :
         string|bool $target_hook = false,
         string|bool $method = false,
         int|bool $priority = false,
-	): array {
+    ): array {
         return f\Hook_Remover::remove_callbacks( $classname, $target_hook, $method, $priority );
     }
 endif;
@@ -134,9 +137,9 @@ if ( ! function_exists( 'xwp_uclean' ) ) :
      * @param  string|array $input Data to sanitize.
      * @return string|array
      */
-	function xwp_uclean( $input ) {
-		return f\Request::uclean( $input );
-	}
+    function xwp_uclean( $input ) {
+        return f\Request::uclean( $input );
+    }
 endif;
 
 if ( ! function_exists( 'xwp_format_term_name' ) ) :
@@ -188,12 +191,12 @@ if ( ! function_exists( 'xwp_bool_to_str' ) ) :
     /**
      * Convert a boolean to a string.
      *
-     * @param  bool $boolean The boolean to convert.
+     * @param  bool|string $boolean The boolean to convert.
      * @return 'yes'|'no'
      */
-	function xwp_bool_to_str( bool|string $boolean ): string {
-		return xwp_str_to_bool( $boolean ) ? 'yes' : 'no';
-	}
+    function xwp_bool_to_str( bool|string $boolean ): string {
+        return xwp_str_to_bool( $boolean ) ? 'yes' : 'no';
+    }
 endif;
 
 

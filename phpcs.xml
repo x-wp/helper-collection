@@ -14,5 +14,14 @@
     <severity>0</severity>
   </rule>
 
+  <rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array" extend="true">
+				<element value="woocommerce"/>
+				<element value="default"/>
+			</property>
+		</properties>
+	</rule>
+
   <file>./</file>
 </ruleset>
