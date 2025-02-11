@@ -30,6 +30,7 @@ class WPFS {
 
     private static function hook(): void {
         require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
         \add_filter( 'filesystem_method', array( self::class, 'fs_method' ), 99, 2 );
     }
 
