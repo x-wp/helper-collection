@@ -59,7 +59,7 @@ final class Term {
             'taxonomy'    => null,
         );
 
-        if ( ! $args['link_format'] ) {
+        if ( ! ( $args['link_format'] ?? false ) ) {
             $args['link_items'] = false;
             $args['link_final'] = false;
         }
