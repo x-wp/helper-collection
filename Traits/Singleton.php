@@ -15,7 +15,7 @@ trait Singleton {
     /**
      * Class instance
      *
-     * @var array<string, static>|static|null
+     * @var static|null
      */
     protected static $instance = null;
 

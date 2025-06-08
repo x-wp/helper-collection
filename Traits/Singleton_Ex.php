@@ -15,6 +15,13 @@ trait Singleton_Ex {
     use Singleton;
 
     /**
+     * Class instance
+     *
+     * @var array<string,static>|null
+     */
+    protected static $instance = null;
+
+    /**
      * Returns the singleton instance
      *
      * @return static
