@@ -46,8 +46,9 @@
     ],
     "files": [
       "Functions/xwp-helper-fns-arr.php",
-      "Functions/xwp-helper-fns-req.php",
+      "Functions/xwp-helper-fns-meta.php",
       "Functions/xwp-helper-fns-num.php",
+      "Functions/xwp-helper-fns-req.php",
       "Functions/xwp-helper-fns.php",
       "WC/xwc-helper-fns-api.php",
       "WC/xwc-helper-fns-core.php"

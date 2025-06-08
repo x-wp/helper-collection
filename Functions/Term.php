@@ -10,6 +10,60 @@ use WP_Term;
  * Taxonomy and term helper functions.
  */
 final class Term {
+    public static function get_by_tax_and_meta( string $meta_key, mixed $value, string $taxonomy, string $retval = 'ID' ): int|WP_Term|null {
+        global $wpdb;
+
+        $res = (int) $wpdb->get_var(
+            $wpdb->prepare(
+                <<<'SQL'
+                SELECT tt.term_id
+                FROM %i AS tt
+                INNER JOIN %i AS tm
+                    ON tt.term_id    = tm.term_id
+                    AND tm.meta_key   = %s
+                    AND tm.meta_value = %s
+                WHERE tt.taxonomy = %s
+                LIMIT 1
+                SQL,
+                $wpdb->term_taxonomy,
+                $wpdb->termmeta,
+                $meta_key,
+                $value,
+                $taxonomy,
+            ),
+        );
+
+        if ( 'ID' === $retval ) {
+            return $res;
+        }
+
+        return $res ? \get_term( $res ) : null;
+    }
+
+    public static function get_by_meta( string $meta_key, mixed $value, string $retval = 'ID' ): int|WP_Term|null {
+        global $wpdb;
+
+        $res = (int) $wpdb->get_var(
+            $wpdb->prepare(
+                <<<'SQL'
+                SELECT term_id FROM %i
+                WHERE meta_key = %s
+                AND meta_value = %s
+                LIMIT 1
+                SQL,
+                $wpdb->termmeta,
+                $meta_key,
+                $value,
+            ),
+        );
+
+        if ( 'ID' === $retval ) {
+            return $res;
+        }
+
+        return $res ? \get_term( $res ) : null;
+    }
+
     /**
      * Formats a term name with its ancestors.
      *
